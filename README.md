@@ -1,4 +1,4 @@
-# Framework para Unity basado en las premisas Strange IOC y Robotlegs (AS3)
+# Framework para Unity basado en las premisas de Strange IOC y Robotlegs (AS3)
 
 Api
 * [Context](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#context)
@@ -192,7 +192,7 @@ T Update<T>();
 * Cuando tenemos injecciones circulares, bidireccionales o cíclicas. 
 Error de diseño.
 Debemos de tener claro que el injector actúa de forma recursiva. Si "A" contiene a "B", "B" no puede contener el Inject de "A" porque entraríamos en un loop.
-Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés en un método que no sea ni el Awake() - Start () o [PostConstruct].
+Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés. Siempre desde un método que no sea ni el Awake() - Start () o [PostConstruct].
 
 Podemos crear un metodo llamado "void Initialize()" y ser llamado desde fuera para recuperar esa dependencia.
 
