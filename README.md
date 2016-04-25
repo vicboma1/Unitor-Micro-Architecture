@@ -688,6 +688,6 @@ public class MonoInject : MonoBehaviour {
 
 
 ## Ejemplo reflector
-Libreria para técnicas de reflexión que permiten hacer mágia, invocaciones dinámicas a los Patterns del framework, creaciones de clases con injects...
+Libreria para técnicas de reflexión que permiten hacer invocaciones dinámicas a los Patterns del framework, creaciones de clases con injects, stabs, mocks ...
 
 https://github.com/vicboma1/Reflection
