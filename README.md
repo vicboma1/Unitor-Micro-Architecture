@@ -1,4 +1,4 @@
-# Framework para Unity basado en Strange IOC y Robotlegs (AS3)
+# Framework para Unity basado en las premisas Strange IOC y Robotlegs (AS3)
 
 Api
 * [Context](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#context)
