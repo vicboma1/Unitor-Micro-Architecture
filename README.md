@@ -1,4 +1,4 @@
-# Framework para Unity basado en las premisas de Strange IOC y Robotlegs (AS3)
+# Framework 
 
 Api
 * [Context](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#context)
@@ -12,6 +12,7 @@ Api
 * [Reflector](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#reflector)
 * [Mono](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#mono)
 * [Patterns](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#patterns)
+* [Attributes](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#attributes)
 * [Errores Comunes](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#errores-comunes)
 
 ## Context
@@ -124,13 +125,18 @@ ICommandConfigurator Once(bool value = true);
 [Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-command)
 
 ## Mono
+### Behaviour 
 ```csharp
+MonoParent: 
+ static void ToValue(object _this);
+ static void Into(object _this);
+ static IContext GetContext();
+ 
 MonoInject:
 protected virtual void Awake();
 protected virtual void Start();
 [PostConstruct]public virtual void PostStart();
 protected static IContext GetContext ();
-protected static IInjector GetInjector ();
 
 MonoConfigurable:
 public class MonoConfigurable : MonoInject , IConfigurable {
@@ -143,14 +149,20 @@ public class MonoAdapterView : AdapterMonoView { }
 MonoController:
 public class MonoController : MonoInject { }
 
-MonoController:
+MonoManager:
 public class MonoManager : MonoInject { }
 
 IMonoView:
 object view { get; }
 ```
 
-[Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-Mono)
+#### StateMachineBehaviour: 
+```csharp
+ public class MonoStateMachineBehaviour : StateMachineBehaviour { }
+ ```
+ 
+
+[Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-mono)
 
 ## Reflector
 ```csharp
@@ -185,6 +197,15 @@ IUpdatable:
 T Update<T>();
 ```
 
+
+## Attributes
+```csharp
+public class ToInterface { 
+	public Type assembly{ get; private set;}
+}
+```
+[Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-attributes)
+
 ## Errores Comunes
 
 #### Injector
@@ -192,7 +213,7 @@ T Update<T>();
 * Cuando tenemos injecciones circulares, bidireccionales o cíclicas. 
 Error de diseño.
 Debemos de tener claro que el injector actúa de forma recursiva. Si "A" contiene a "B", "B" no puede contener el Inject de "A" porque entraríamos en un loop.
-Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés. Siempre desde un método que no sea ni el Awake() - Start () o [PostConstruct].
+Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés en un método que no sea ni el Awake() - Start () o [PostConstruct].
 
 Podemos crear un metodo llamado "void Initialize()" y ser llamado desde fuera para recuperar esa dependencia.
 
@@ -688,6 +709,49 @@ public class MonoInject : MonoBehaviour {
 
 
 ## Ejemplo reflector
-Libreria para técnicas de reflexión que permiten hacer invocaciones dinámicas a los Patterns del framework, creaciones de clases con injects, stabs, mocks ...
+Libreria que permite técnicas de reflexión para invocaciones dinámicas a los Patterns del Framework, creaciones de clases con injects, setteo de variables privates, mocks, stubs...
 
 https://github.com/vicboma1/Reflection
+
+
+## Ejemplo attributes
+
+```csharp
+public interface Ixxxxx{
+   void Control();
+}
+
+
+[ToInterface(typeof(Ixxxxx))]
+public class Controller : MonoController , Ixxxxx {
+
+   [PostConstruct]
+   public override void PostStart(){
+      this.Control ();
+   }
+		
+   public void Control(){
+      Debug.Log ("I am a Controller!!!");
+   }
+   
+   public void MonoControl(){
+      Debug.Log ("I am a MonoControl!!!");
+   }
+}
+
+
+public class Controller2 : MonoController {
+
+   [Inject]
+   public Ixxxxx controller;
+
+   [PostConstruct]
+   public override void PostStart(){
+  	Debug.Log ("I am a Controller 2");
+	controller.Control ();
+   }
+		
+}
+
+```
+
