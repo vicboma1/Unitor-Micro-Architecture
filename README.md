@@ -41,7 +41,6 @@ void Clear();
 ## Configurator
 ```csharp
 void AddConfig<T> () where T : class;
-void AddConfigHandler(IMatcher matcher, Action<object> process);
 void Destroy ();
 ```
 [Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-configurator)
@@ -51,14 +50,10 @@ void Destroy ();
 IInjector parent { get; set; }
 IInjector CreateChild();
 bool HasMapping <T>(object name = null);
-InjectionMapping Map<T>(object name = null);
 void Unmap<T>(object name = null);
-bool Satisfies<T>(object name = null);
-InjectionMapping GetMapping<T>(object name = null);
 void Into(object target);
 T GetInstance<T>(object name = null, Type targetType = null);
 T GetOrCreateNewInstance<T>();
-T InstantiateUnmapped<T>();
 void DestroyInstance(object instance);
 void Teardown();
 ```
@@ -111,16 +106,10 @@ ICommandUnMapper Unmap<T>(Enum type);
 ```
 #### Dependencies
 ```csharp
-ICommandUnMapper:
-void FromCommand<T>();
-void FromAll();
-
 ICommandMapper:
 ICommandConfigurator ToCommand<T>();
 
 ICommandConfigurator:
-ICommandConfigurator WithGuards(params object[] guards);
-ICommandConfigurator WithHooks(params object[] hooks);
 ICommandConfigurator Once(bool value = true);
 ```
 [Ejemplo](https://github.com/playgram/Software/blob/victor_develop/framework/README.md#ejemplo-command)
