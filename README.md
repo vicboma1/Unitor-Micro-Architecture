@@ -2,19 +2,19 @@
 ## Robotlegs (AS3) & Strange IOC & Dry-IO
 
 Api
-* [Context](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#context)
-* [Installer](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#installer)
-* [Configurator](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#configurator)
-* [Injector](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#injector)
-* [Dispatcher](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#dispatcher)
-* [Adapter](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#adapter)
-* [Controller](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#controller)
-* [Command Map](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#command-map)
-* [Reflector](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#reflector)
-* [Mono](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#mono)
-* [Patterns](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#patterns)
-* [Attributes](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#attributes)
-* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#errores-comunes)
+* [Context](https://github.com/vicboma1/FrameworkUnity#context)
+* [Installer](https://github.com/vicboma1/FrameworkUnity#installer)
+* [Configurator](https://github.com/vicboma1/FrameworkUnity#configurator)
+* [Injector](https://github.com/vicboma1/FrameworkUnity#injector)
+* [Dispatcher](https://github.com/vicboma1/FrameworkUnity#dispatcher)
+* [Adapter](https://github.com/vicboma1/FrameworkUnity#adapter)
+* [Controller](https://github.com/vicboma1/FrameworkUnity#controller)
+* [Command Map](https://github.com/vicboma1/FrameworkUnity#command-map)
+* [Reflector](https://github.com/vicboma1/FrameworkUnity#reflector)
+* [Mono](https://github.com/vicboma1/FrameworkUnity#mono)
+* [Patterns](https://github.com/vicboma1/FrameworkUnity#patterns)
+* [Attributes](https://github.com/vicboma1/FrameworkUnity#attributes)
+* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity#errores-comunes)
 
 ## Context
 ```csharp
@@ -28,7 +28,7 @@ IContext AddConfigHandler(IMatcher matcher, Action<object> handler);
 IContext Install<T> () where T : IExtensionable ;
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-context)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-context)
 
 ## Installer
 ```csharp
@@ -36,14 +36,14 @@ void Install<T>() where T : IExtensionable;
 void Clear();
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-installer)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-installer)
 
 ## Configurator
 ```csharp
 void AddConfig<T> () where T : class;
 void Destroy ();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-configurator)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-configurator)
 
 ## Injector
 ```csharp
@@ -57,7 +57,7 @@ T GetOrCreateNewInstance<T>();
 void DestroyInstance(object instance);
 void Teardown();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-injector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-injector)
 
 
 ## Dispatcher
@@ -83,7 +83,7 @@ IEventInjector : IEvent { IInjector injector { get;} }
 IEventContext : IEventInjector { IContext context { get;} }
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-dispatcher)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-dispatcher)
 
 
 ## Adapter
@@ -93,11 +93,11 @@ event EventHandler removeEventHandler;
 event EventHandler disableEventHandler;
 event EventHandler enableEventHandler;
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-adapter)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-adapter)
 
 ## Controller
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-controller)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-controller)
 
 ## Command Map
 ```csharp
@@ -112,7 +112,7 @@ ICommandConfigurator ToCommand<T>();
 ICommandConfigurator:
 ICommandConfigurator Once(bool value = true);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-command)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-command)
 
 ## Mono
 ### Behaviour 
@@ -152,7 +152,7 @@ object view { get; }
  ```
  
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-mono)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-mono)
 
 ## Reflector
 ```csharp
@@ -164,7 +164,7 @@ internal static T CreateInstanceDefaultExpressionLambda(Type instance);
 internal static T CreateInstanceConstructor(Type instance);
 internal static T CreateInstanceConstructor(Type instance, Type[] typesObject, object[] obj);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-reflector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-reflector)
 
 ## Patterns
 ```csharp
@@ -194,7 +194,7 @@ public class ToInterface {
 	public Type assembly{ get; private set;}
 }
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/edit/master/README.md#ejemplo-attributes)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-attributes)
 
 ## Errores Comunes
 
