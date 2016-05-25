@@ -1,22 +1,20 @@
 # Framework Based On :
 ## Robotlegs (AS3) & Strange IOC & Dry-IO
 
-# Framework 
-
 Api
-* [Context](https://github.com/vicboma1/FrameworkUnity/README.md#context)
-* [Installer](https://github.com/vicboma1/FrameworkUnity/README.md#installer)
-* [Configurator](https://github.com/vicboma1/FrameworkUnity/README.md#configurator)
-* [Injector](https://github.com/vicboma1/FrameworkUnity/README.md#injector)
-* [Dispatcher](https://github.com/vicboma1/FrameworkUnity/README.md#dispatcher)
-* [Adapter](https://github.com/vicboma1/FrameworkUnity/README.md#adapter)
-* [Controller](https://github.com/vicboma1/FrameworkUnity/README.md#controller)
-* [Command Map](https://github.com/vicboma1/FrameworkUnity/README.md#command-map)
-* [Reflector](https://github.com/vicboma1/FrameworkUnity/README.md#reflector)
-* [Mono](https://github.com/vicboma1/FrameworkUnity/README.md#mono)
-* [Patterns](https://github.com/vicboma1/FrameworkUnity/README.md#patterns)
-* [Attributes](https://github.com/vicboma1/FrameworkUnity/README.md#attributes)
-* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/README.md#errores-comunes)
+* [Context](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#context)
+* [Installer](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#installer)
+* [Configurator](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#configurator)
+* [Injector](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#injector)
+* [Dispatcher](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#dispatcher)
+* [Adapter](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#adapter)
+* [Controller](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#controller)
+* [Command Map](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#command-map)
+* [Reflector](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#reflector)
+* [Mono](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#mono)
+* [Patterns](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#patterns)
+* [Attributes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#attributes)
+* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#errores-comunes)
 
 ## Context
 ```csharp
@@ -30,7 +28,7 @@ IContext AddConfigHandler(IMatcher matcher, Action<object> handler);
 IContext Install<T> () where T : IExtensionable ;
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-context)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-context)
 
 ## Installer
 ```csharp
@@ -38,7 +36,7 @@ void Install<T>() where T : IExtensionable;
 void Clear();
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-installer)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-installer)
 
 ## Configurator
 ```csharp
@@ -46,7 +44,7 @@ void AddConfig<T> () where T : class;
 void AddConfigHandler(IMatcher matcher, Action<object> process);
 void Destroy ();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-configurator)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-configurator)
 
 ## Injector
 ```csharp
@@ -64,7 +62,7 @@ T InstantiateUnmapped<T>();
 void DestroyInstance(object instance);
 void Teardown();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-injector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-injector)
 
 
 ## Dispatcher
@@ -90,7 +88,7 @@ IEventInjector : IEvent { IInjector injector { get;} }
 IEventContext : IEventInjector { IContext context { get;} }
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-dispatcher)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-dispatcher)
 
 
 ## Adapter
@@ -100,11 +98,11 @@ event EventHandler removeEventHandler;
 event EventHandler disableEventHandler;
 event EventHandler enableEventHandler;
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-adapter)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-adapter)
 
 ## Controller
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-controller)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-controller)
 
 ## Command Map
 ```csharp
@@ -125,7 +123,7 @@ ICommandConfigurator WithGuards(params object[] guards);
 ICommandConfigurator WithHooks(params object[] hooks);
 ICommandConfigurator Once(bool value = true);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-command)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-command)
 
 ## Mono
 ```csharp
@@ -158,7 +156,7 @@ IMonoView:
 object view { get; }
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-Mono)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-Mono)
 
 ## Reflector
 ```csharp
@@ -170,7 +168,7 @@ internal static T CreateInstanceDefaultExpressionLambda(Type instance);
 internal static T CreateInstanceConstructor(Type instance);
 internal static T CreateInstanceConstructor(Type instance, Type[] typesObject, object[] obj);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-reflector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-reflector)
 
 ## Patterns
 ```csharp
@@ -200,7 +198,7 @@ public class ToInterface
 public class ToTypeValue
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-attributes)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-attributes)
 
 
 ## Errores Comunes
@@ -777,3 +775,4 @@ public class Controller2 : MonoController {
 }
 
 ```
+
