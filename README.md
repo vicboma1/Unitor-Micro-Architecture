@@ -1,20 +1,22 @@
 # Framework Based On :
 ## Robotlegs (AS3) & Strange IOC & Dry-IO
 
+# Framework 
+
 Api
-* [Context](https://github.com/vicboma1/FrameworkUnity#context)
-* [Installer](https://github.com/vicboma1/FrameworkUnity#installer)
-* [Configurator](https://github.com/vicboma1/FrameworkUnity#configurator)
-* [Injector](https://github.com/vicboma1/FrameworkUnity#injector)
-* [Dispatcher](https://github.com/vicboma1/FrameworkUnity#dispatcher)
-* [Adapter](https://github.com/vicboma1/FrameworkUnity#adapter)
-* [Controller](https://github.com/vicboma1/FrameworkUnity#controller)
-* [Command Map](https://github.com/vicboma1/FrameworkUnity#command-map)
-* [Reflector](https://github.com/vicboma1/FrameworkUnity#reflector)
-* [Mono](https://github.com/vicboma1/FrameworkUnity#mono)
-* [Patterns](https://github.com/vicboma1/FrameworkUnity#patterns)
-* [Attributes](https://github.com/vicboma1/FrameworkUnity#attributes)
-* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity#errores-comunes)
+* [Context](https://github.com/vicboma1/FrameworkUnity/README.md#context)
+* [Installer](https://github.com/vicboma1/FrameworkUnity/README.md#installer)
+* [Configurator](https://github.com/vicboma1/FrameworkUnity/README.md#configurator)
+* [Injector](https://github.com/vicboma1/FrameworkUnity/README.md#injector)
+* [Dispatcher](https://github.com/vicboma1/FrameworkUnity/README.md#dispatcher)
+* [Adapter](https://github.com/vicboma1/FrameworkUnity/README.md#adapter)
+* [Controller](https://github.com/vicboma1/FrameworkUnity/README.md#controller)
+* [Command Map](https://github.com/vicboma1/FrameworkUnity/README.md#command-map)
+* [Reflector](https://github.com/vicboma1/FrameworkUnity/README.md#reflector)
+* [Mono](https://github.com/vicboma1/FrameworkUnity/README.md#mono)
+* [Patterns](https://github.com/vicboma1/FrameworkUnity/README.md#patterns)
+* [Attributes](https://github.com/vicboma1/FrameworkUnity/README.md#attributes)
+* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/README.md#errores-comunes)
 
 ## Context
 ```csharp
@@ -28,7 +30,7 @@ IContext AddConfigHandler(IMatcher matcher, Action<object> handler);
 IContext Install<T> () where T : IExtensionable ;
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-context)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-context)
 
 ## Installer
 ```csharp
@@ -36,28 +38,33 @@ void Install<T>() where T : IExtensionable;
 void Clear();
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-installer)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-installer)
 
 ## Configurator
 ```csharp
 void AddConfig<T> () where T : class;
+void AddConfigHandler(IMatcher matcher, Action<object> process);
 void Destroy ();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-configurator)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-configurator)
 
 ## Injector
 ```csharp
 IInjector parent { get; set; }
 IInjector CreateChild();
 bool HasMapping <T>(object name = null);
+InjectionMapping Map<T>(object name = null);
 void Unmap<T>(object name = null);
+bool Satisfies<T>(object name = null);
+InjectionMapping GetMapping<T>(object name = null);
 void Into(object target);
 T GetInstance<T>(object name = null, Type targetType = null);
 T GetOrCreateNewInstance<T>();
+T InstantiateUnmapped<T>();
 void DestroyInstance(object instance);
 void Teardown();
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-injector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-injector)
 
 
 ## Dispatcher
@@ -83,7 +90,7 @@ IEventInjector : IEvent { IInjector injector { get;} }
 IEventContext : IEventInjector { IContext context { get;} }
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-dispatcher)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-dispatcher)
 
 
 ## Adapter
@@ -93,11 +100,11 @@ event EventHandler removeEventHandler;
 event EventHandler disableEventHandler;
 event EventHandler enableEventHandler;
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-adapter)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-adapter)
 
 ## Controller
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-controller)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-controller)
 
 ## Command Map
 ```csharp
@@ -106,16 +113,21 @@ ICommandUnMapper Unmap<T>(Enum type);
 ```
 #### Dependencies
 ```csharp
+ICommandUnMapper:
+void FromCommand<T>();
+void FromAll();
+
 ICommandMapper:
 ICommandConfigurator ToCommand<T>();
 
 ICommandConfigurator:
+ICommandConfigurator WithGuards(params object[] guards);
+ICommandConfigurator WithHooks(params object[] hooks);
 ICommandConfigurator Once(bool value = true);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-command)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-command)
 
 ## Mono
-### Behaviour 
 ```csharp
 MonoParent: 
  static void ToValue(object _this);
@@ -139,20 +151,14 @@ public class MonoAdapterView : AdapterMonoView { }
 MonoController:
 public class MonoController : MonoInject { }
 
-MonoManager:
+MonoController:
 public class MonoManager : MonoInject { }
 
 IMonoView:
 object view { get; }
 ```
 
-#### StateMachineBehaviour: 
-```csharp
- public class MonoStateMachineBehaviour : StateMachineBehaviour { }
- ```
- 
-
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-mono)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-Mono)
 
 ## Reflector
 ```csharp
@@ -164,7 +170,7 @@ internal static T CreateInstanceDefaultExpressionLambda(Type instance);
 internal static T CreateInstanceConstructor(Type instance);
 internal static T CreateInstanceConstructor(Type instance, Type[] typesObject, object[] obj);
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-reflector)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-reflector)
 
 ## Patterns
 ```csharp
@@ -187,14 +193,15 @@ IUpdatable:
 T Update<T>();
 ```
 
-
 ## Attributes
+
 ```csharp
-public class ToInterface { 
-	public Type assembly{ get; private set;}
-}
+public class ToInterface
+public class ToTypeValue
 ```
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity#ejemplo-attributes)
+
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/README.md#ejemplo-attributes)
+
 
 ## Errores Comunes
 
@@ -706,42 +713,67 @@ https://github.com/vicboma1/Reflection
 
 ## Ejemplo attributes
 
+
+
 ```csharp
-public interface Ixxxxx{
+using UnityEngine;
+using System.Collections;
+using System.ComponentModel;
+
+public interface Ixxxxxxxx {
    void Control();
 }
 
+[ToInterface(typeof(Ixxxxxxxx))]
+public class Controller : MonoController , Ixxxxxxxx {
 
-[ToInterface(typeof(Ixxxxx))]
-public class Controller : MonoController , Ixxxxx {
+        [SerializeField]
+        [ToTypeField(-10)]
+        protected int a = 5;
 
-   [PostConstruct]
-   public override void PostStart(){
-      this.Control ();
-   }
+        [SerializeField]
+        [ToTypeField(-10)]
+        protected int b = 5;
+
+        [SerializeField]
+        [ToTypeField(-10F)]
+        protected float c = 888F;
+     
+        [ToTypeField(-10.222)]
+	public double h;
+     
+        [ToTypeField("Hola")]
+        public string str;
+
+	[PostConstruct]
+	public override void PostStart(){
+	/ * ToTypeField availables!!! a = -10; | b = -10; | ... | str = "hola" */
+		this.Control ();
+	}
 		
-   public void Control(){
-      Debug.Log ("I am a Controller!!!");
-   }
-   
-   public void MonoControl(){
-      Debug.Log ("I am a MonoControl!!!");
-   }
+	public void Control(){
+		Debug.Log ("I am a Controller!!!");
+	}
+
+	public void MonoControl(){
+		Debug.Log ("I am a MonoControl!!!");
+	}
 }
 
+using UnityEngine;
+using System.Collections;
 
 public class Controller2 : MonoController {
 
-   [Inject]
-   public Ixxxxx controller;
+	[Inject]
+	public Ixxxxxxxx controller;
 
-   [PostConstruct]
-   public override void PostStart(){
-  	Debug.Log ("I am a Controller 2");
-	controller.Control ();
-   }
+	[PostConstruct]
+	public override void PostStart(){
+		Debug.Log ("I am a Controller 2");
+		controller.Control ();
+	}
 		
 }
 
 ```
-
