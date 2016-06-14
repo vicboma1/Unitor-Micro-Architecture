@@ -2,7 +2,7 @@
 * Robotlegs (AS3)
 * Strange IOC
 * Dry-IO
-* Promises
+* Promises (JS)
 * Spring.io
 
 Api
@@ -222,7 +222,7 @@ IPromise<T>:
   IPromise<Z> Once<Z>(Func<T, IEnumerable<IPromise<Z>>> chain);
 ```
 
-[Ejemplo based on C-Sharp-Promise](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
 
 ## Errores Comunes
 
