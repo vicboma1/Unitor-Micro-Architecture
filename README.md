@@ -14,6 +14,7 @@ Api
 * [Mono](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#mono)
 * [Patterns](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#patterns)
 * [Attributes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#attributes)
+* [Promises](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#promises)
 * [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#errores-comunes)
 
 ## Context
@@ -200,6 +201,24 @@ public class ToTypeValue
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-attributes)
 
+## Promises
+
+```csharp
+IPromise<T>:
+  void Done(Action<T> onResolved, Action<Exception> onRejected);
+  void Done(Action<T> onResolved);
+  void Done();
+  IPromise<T> Catch(Action<Exception> onRejected);
+  IPromise<Z> Then<Z>(Func<T, IPromise<Z>> onResolved);
+  IPromise<T> Then(Action<T> onResolved);
+  IPromise<Z> Then<Z>(Func<T, IPromise<Z>> onResolved, Action<Exception> onRejected);
+  IPromise<T> Then(Action<T> onResolved, Action<Exception> onRejected);
+  IPromise<Z> Then<Z>(Func<T, Z> transform);
+  IPromise<IEnumerable<Z>> All<Z>(Func<T, IEnumerable<IPromise<Z>>> chain);
+  IPromise<Z> Once<Z>(Func<T, IEnumerable<IPromise<Z>>> chain);
+```
+
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
 
 ## Errores Comunes
 
@@ -776,3 +795,158 @@ public class Controller2 : MonoController {
 
 ```
 
+## Ejemplo promises
+```csharp
+public void ResolvePromise() {
+   var promise = Promise<String>.Resolved("Victor Bolinches");
+   var completed = 0;
+   promise.Then(v => { ++completed; });
+}
+
+public void RejectedPromise() {
+   var ex = new Exception();
+   var promise = Promise<int>.Rejected(ex);
+   var errors = 0;
+   promise.Catch(e => { ++errors; );
+}
+
+public void ResolvePromiseAndTriggerHandler() {
+   var promise = Promise<String>();
+   var completed = 0;
+   promise.Then(v => { ++completed; });
+   promise.Resolved("Victor Bolinches");
+}
+
+public void ResolvePromiseAndTriggeMultipleBuilderHandler() {
+   var promise = Promise<int>();
+   var completed = 0;
+   promise
+   	.Then(v => { ++completed; })
+   	.Then(v => { ++completed; });
+
+   promise.Resolved(3);
+}
+
+public void ResolvePromiseAndTriggeMultipleBuilderHandlerGeneric() {
+   var promise = Promise<int>();
+   var completed = "3";
+   promise
+   	.Then<string>(v => { chainedPromise; })
+   	.Then(v => { Assert.Equal(completed, v); });
+
+   promise.Resolved(3);
+}
+
+public void RejectedPromiseAndTriggerHandler() {
+   var ex = new Exception();
+   var promise = Promise<int>();
+   var errors = 0;
+   promise.Catch(e => { ++errors; );
+   promise.Rejected(ex);
+}
+
+public void RejectedPromiseAndTriggeMultipleBuilderHandler() {
+   var promise = Promise<int>();
+   var completed = 0;
+   promise
+   	.Catch(v => { ++completed; })
+   	.Catch(v => { ++completed; });
+
+   promise.Rejected(3);
+}
+
+public void AllPromises() {
+  var promise = new Promise<string>();
+  var chainedPromise1 = new Promise<int>();
+  var chainedPromise2 = new Promise<int>();
+  
+  var completed = 0;
+
+promise
+  .All(i => new List<IPromise<int>>() { chainedPromise1,chainedPromise2 } )
+  .Then(result => {
+     var items = result.ToArray();
+     ++completed;
+   });
+
+promise.Resolve("hello");
+
+chainedPromise2.Resolve(10);
+chainedPromise1.Resolve(2);
+}
+
+public void AllDirectAndRejectedPromises() {
+  var chainedPromise1 = new Promise<int>();
+  var chainedPromise2 = new Promise<int>();
+  
+  var completed = 0;
+
+Promise<int>
+   .All(i => new List<IPromise<int>>() { chainedPromise1,chainedPromise2 } )
+   .Then(result => {
+	   throw new ApplicationException("Shouldn't happen");
+   })
+   .Catch(e => {
+      ++errors;
+   });
+   
+chainedPromise1.Reject(new ApplicationException("Error!"));	
+
+chainedPromise2.Resolve(10);
+ //**** chainedPromise1.Resolve(2);
+}
+
+public void OncePromises() {
+  var promise = new Promise<string>();
+  var chainedPromise1 = new Promise<int>();
+  var chainedPromise2 = new Promise<int>();
+  
+  var completed = 0;
+
+promise
+  .Once(i => new List<IPromise<int>>() { chainedPromise1,chainedPromise2 } )
+  .Then(result => {
+     var items = result.ToArray();
+     ++completed;
+   });
+
+promise.Resolve("hello");
+
+chainedPromise2.Resolve(10);
+}
+
+public void AllDirectAndRejectedPromises() {
+  var chainedPromise1 = new Promise<int>();
+  var chainedPromise2 = new Promise<int>();
+  
+  var completed = 0;
+
+Promise<int>
+   .Once(i => new List<IPromise<int>>() { chainedPromise1,chainedPromise2 } )
+   .Then(result => {
+     var items = result.ToArray();
+     ++completed;
+   })
+   .Catch(e => {
+      ++errors;
+   });
+   
+chainedPromise1.Reject(new ApplicationException("Error!"));	
+chainedPromise2.Resolve(10);
+}
+
+public void DoneWithResolvedReject() {
+  var promise = new Promise<int>();
+  var callback = 0;
+  var errorCallback = 0;
+  var expectedValue = 5;
+
+  promise.Done(
+    value => { ++callback; },
+    ex => { ++errorCallback; }
+  );
+
+  promise.Resolve(expectedValue);
+}
+
+```
