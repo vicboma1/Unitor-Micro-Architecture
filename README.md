@@ -2,7 +2,7 @@
 * Robotlegs (AS3)
 * Strange IOC
 * Dry-IO
-* Promises (C-Sharp-Promise)
+* Promises
 * Spring.io
 
 Api
@@ -205,7 +205,7 @@ public class ToTypeValue
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-attributes)
 
-## Promises
+## Promises 
 
 ```csharp
 IPromise<T>:
@@ -222,7 +222,7 @@ IPromise<T>:
   IPromise<Z> Once<Z>(Func<T, IEnumerable<IPromise<Z>>> chain);
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
+[Ejemplo based on C-Sharp-Promise](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
 
 ## Errores Comunes
 
