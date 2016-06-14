@@ -1,4 +1,4 @@
-# Framework Unitor based on:
+# Unitor - MicroFramework based on:
 * Robotlegs (AS3)
 * Strange IOC
 * Dry-IO
