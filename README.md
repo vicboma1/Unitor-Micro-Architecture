@@ -1,5 +1,9 @@
-# Framework Based On :
-## Robotlegs (AS3) & Strange IOC & Dry-IO
+# Framework Unitor bsaed on:
+* Robotlegs (AS3)
+* Strange IOC
+* Dry-IO
+* Promises (C-Sharp-Promise)
+* Spring.io
 
 Api
 * [Context](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#context)
