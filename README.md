@@ -867,7 +867,14 @@ public class TopRectangleScoreAdapter : MonoAdapterView, ITopRectangleScoreAdapt
 [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 private static void OnAfterSceneLoadRuntimeMethod() {
 	Debug.Log ("After scene loaded - Called Awake and run Configure ");
-	ResourceAsync.Invoke (context);
+	ResourceAsync
+		.Execute (context)
+		.Then(()=>{
+			Debug.Load("ResourceAsync OK!")
+		}).Catch(()=>{
+			Debug.Load("ResourceAsync KO!")
+			System.Exit(0);
+		});
 }
 	
 ```
