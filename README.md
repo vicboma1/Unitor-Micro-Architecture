@@ -76,6 +76,7 @@ void Teardown();
 ```csharp
 void Execute (IEvent evt);
 IPromise<T> ExecuteAsync (IEvent evt);
+IPromise<T> ExecuteAsync (IEvent evt, IPromise promise);
 void Add<T> (Enum type, Action<T> listener);
 void Add (Enum type, Action<IEvent> listener);
 void Add (Enum type, Action<IEventInjector> listener);
@@ -122,6 +123,8 @@ IPromise<Enumerable<float>> Hidden(Adapter adapter);
 ```csharp
 ICommandMapper Map<T>(Enum type);
 ICommandUnMapper Unmap<T>(Enum type);
+ICommandMapperAsync Map<T>(Enum type);
+ICommandUnMapperAsync Unmap<T>(Enum type);
 ```
 #### Dependencies
 ```csharp
@@ -662,9 +665,7 @@ public class CountDownTimerEndCountCommand : ICommandAsync {
 	[Inject]
 	public PuzzleConfiguration puzzleConfiguration{ get; private set; }
 
-	public IPromise ExecuteAsync() {
-	   var promise = new Promise();
-
+	public IPromise ExecuteAsync(IEvent event, IPromise promise)  {
 	   Debug.Log (" COMMAND Type.END_COUNT_ACTION *********************** ");
 
 	   //Game resolve the promise
@@ -686,7 +687,7 @@ Un "Action" es un servicio que hace algo.
       .Then(()=> {
       	  managerDialog
       	      .SetActive (Constants.END_DIALOG, true)
-      	      .Then((enumerable)=>{
+      	      .Then((enumerable)=> {
       	            	  Debug.Log("Obtengo la respuesta");
       	      });
       });
@@ -1174,7 +1175,7 @@ eventCommandMap.Map(PuzzleGameConfigureEvent.Type.POST_INITIALIZE_EVENT).ToComma
 
 public PuzzleGameConfigureCommandAsync : ICommandAsync {
 
-	public IPromise ExecuteAsync() {
+	public IPromise ExecuteAsync(IEvent event, IPromise promise) {
 		var promise = new Promise();
 		
 		{ ..... }
