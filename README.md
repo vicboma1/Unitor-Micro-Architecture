@@ -16,6 +16,8 @@ Api
 * [Command Map](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#command-map)
 * [Reflector](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#reflector)
 * [Mono](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#mono)
+* [Graphic](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#graphic)
+* [ResourceAsync](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#resourceasync)
 * [Patterns](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#patterns)
 * [Attributes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#attributes)
 * [Promises](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#promises)
@@ -73,6 +75,7 @@ void Teardown();
 ## Dispatcher
 ```csharp
 void Execute (IEvent evt);
+IPromise<T> ExecuteAsync (IEvent evt);
 void Add<T> (Enum type, Action<T> listener);
 void Add (Enum type, Action<IEvent> listener);
 void Add (Enum type, Action<IEventInjector> listener);
@@ -106,6 +109,12 @@ event EventHandler enableEventHandler;
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-adapter)
 
 ## Controller
+```csharp
+event EventHandler addEventHandler;
+event EventHandler removeEventHandler;
+IPromise<Enumerable<float>> Visible(Adapter adapter);
+IPromise<Enumerable<float>> Hidden(Adapter adapter);
+```
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-controller)
 
@@ -117,11 +126,13 @@ ICommandUnMapper Unmap<T>(Enum type);
 #### Dependencies
 ```csharp
 ICommandUnMapper:
+void FromCommandAsync<T>();
 void FromCommand<T>();
 void FromAll();
 
 ICommandMapper:
 ICommandConfigurator ToCommand<T>();
+ICommandConfigurator ToCommandAsync<T>();
 
 ICommandConfigurator:
 ICommandConfigurator WithGuards(params object[] guards);
@@ -135,6 +146,7 @@ ICommandConfigurator Once(bool value = true);
 MonoParent: 
  static void ToValue(object _this);
  static void Into(object _this);
+ bool ToTypeField (object _this);
  static IContext GetContext();
  
 MonoInject:
@@ -163,6 +175,23 @@ object view { get; }
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-Mono)
 
+## Graphic
+```csharp	
+IPromise<float> CrossFadeAlpha (Image image, float alpha, float duration, bool ignoreTimeScale);
+IPromise<float> CrossFadeAlpha (Slider slider, float alpha, float duration, bool ignoreTimeScale);
+IPromise<float> CrossFadeAlpha (Text text, float alpha, float duration, bool ignoreTimeScale);
+IPromise<float> CrossFadeColor (CanvasRenderer canvasRenderer, Color targetColor, float duration, bool ignoreTimeScale, bool useAlpha, bool useRGB);
+```
+
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-graphic)
+
+## ResouceAsync
+```csharp
+static IPromise<Z> Execute(IContext context);
+```
+
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#resourceasync)
+
 ## Reflector
 ```csharp
 internal static T GetInstanceProperty(string _className, string propertyName);
@@ -179,6 +208,7 @@ internal static T CreateInstanceConstructor(Type instance, Type[] typesObject, o
 ```csharp
 ICommand: 
 void Execute(); 
+IPromise<T> ExecuteAsync(); 
 
 IConfigurable: 
 void Configure(); 
@@ -194,13 +224,17 @@ IPostConstructor:
 
 IUpdatable:
 T Update<T>();
+
+IFixedUpdatable:
+T FixedUpdate<T>();
 ```
 
 ## Attributes
 
 ```csharp
-public class ToInterface
-public class ToTypeValue
+class ToInterface
+class ToTypeValue
+class ToResourceAsync
 ```
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-attributes)
@@ -348,6 +382,7 @@ dispatcher.Add (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, TopRectang
 dispatcher.Execute(PuzzleGameConfigureEvent.Create());
 ``` 
 
+# Ejemplos
 
 ## Ejemplo Context
 El contexto será visible a través de la MetaData "[Inject] public IContext context;" en todas las clases que estén especificadas en el injector
@@ -526,7 +561,7 @@ Lanzo el servicio:
 ```csharp
    dispatcher.Execute (EventInjector.Create (HelloWorldEvent.Type.HELLO_ACTION, injector ));
 ```
-	
+
 ## Ejemplo Adapter
 
 Definimos un GameObject en el Editor y le añadimos un Componente que extienda de "MonoAdapterView".
@@ -693,6 +728,94 @@ public class UpdateScoreAction
 	}
 }
 ```
+
+
+Configuración Asíncrona:
+```csharp
+public override void Configure(){
+  eventCommandMap.Map(CountDownTimerEndCountEvent.Type.END_COUNT_EVENT).ToCommandAsync<CountDownTimerEndCountCommandAsync>();
+}
+```
+
+Cuando lance el comando "UpdateScoreCommandAsync" llamaré al evento "UpdateScoreEvent".
+```csharp
+   dispatcher
+      .ExecuteAsync(CountDownTimerEndCountEvent.Create())
+      .Then(()=> {
+      	  Debug.Log("Obtengo la respuesta cuando acaba mi comando");
+      });
+```
+
+Obligado que el "Type" esté dentro siempre del evento que vamos a lanzar. Está automatizado.
+
+```csharp
+public class CountDownTimerEndCountEvent : Event
+{
+	public enum Type { END_COUNT_EVENT }
+
+	public static CountDownTimerEndCountEvent Create(){
+		return new CountDownTimerEndCountEvent ();
+	}
+
+	CountDownTimerEndCountEvent () : base(Type.END_COUNT_EVENT) {
+		
+	}
+}
+```
+
+La definicion del comando asíncrono nos obliga a implementar ICommandAsync
+
+```csharp
+using UnityEngine;
+using System.Collections;
+
+public class CountDownTimerEndCountCommand : ICommandAsync {
+
+	[Inject]
+	public IInjector injector;
+
+	[Inject]
+	public IEventDispatcher dispatcher;
+
+	[Inject]
+	public CountDownTimerEndCountEvent countDownTimerEndCountEvent;
+
+	[Inject]
+	public PuzzleControllerUpdate puzzleControllerUpdate{ get; private set;}
+
+	[Inject]
+	public PuzzleConfiguration puzzleConfiguration{ get; private set; }
+
+	public IPromise ExecuteAsync() {
+	   var promise = new Promise();
+
+	   Debug.Log (" COMMAND Type.END_COUNT_ACTION *********************** ");
+
+	   //Game resolve the promise
+	   puzzleController.endMovingNodeModel (promise);
+
+	   puzzleConfiguration.isPause = true;
+	   puzzleConfiguration.count++;
+		    
+	   return promise;
+	}
+}
+```
+El "Action se suprime y resolvemos la lógica del servicio en la resolución de la promesa
+Un "Action" es un servicio que hace algo.
+
+```csharp
+ dispatcher
+      .ExecuteAsync(CountDownTimerEndCountEvent.Create())
+      .Then(()=> {
+      	  managerDialog
+      	      .SetActive (Constants.END_DIALOG, true)
+      	      .Then((enumerable)=>{
+      	            	  Debug.Log("Obtengo la respuesta");
+      	      });
+      });
+```
+
 
 ## Ejemplo Mono
 Clase que automatiza la llamada al contexto e injector de nuestros MonoBehaviour en el editor
