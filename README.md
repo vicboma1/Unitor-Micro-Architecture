@@ -848,6 +848,29 @@ public class MonoInject : MonoBehaviour {
 }
 ```
 
+## Ejemplo graphic
+Sobreescribe la clase abstract de UnityEngine para otorgar una promesa en los métodos asíncronos de ITweener
+
+```csharp
+Promise<float>.All(
+	monoGraphic.CrossFadeAlpha (pauseDialogAdapter.textLogo,  alpha, 0.5F, true),
+	monoGraphic.CrossFadeAlpha (pauseDialogAdapter.textBackground,  alpha, 0.5F, false)
+).Then (enumerable => {
+	promise.Resolve(enumerable);
+});
+```
+
+Alternativa
+
+```csharp
+Promise<float>.All(
+	pauseDialogAdapter.textLogo.CrossFadeAlpha(  alpha, 0.5F, true),
+        pauseDialogAdapter.textBackground.CrossFadeAlpha(  alpha, 0.5F, false)
+).Then (enumerable => {
+	promise.Resolve(enumerable);
+});
+```
+
 
 ## Ejemplo reflector
 Libreria que permite técnicas de reflexión para invocaciones dinámicas a los Patterns del Framework, creaciones de clases con injects, setteo de variables privates, mocks, stubs...
