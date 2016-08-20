@@ -6,22 +6,22 @@
 * Spring.io
 
 Api
-* [Context](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#context)
-* [Installer](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#installer)
-* [Configurator](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#configurator)
-* [Injector](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#injector)
-* [Dispatcher](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#dispatcher)
-* [Adapter](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#adapter)
-* [Controller](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#controller)
-* [Command Map](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#command-map)
-* [Reflector](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#reflector)
-* [Mono](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#mono)
-* [Graphic](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#graphic)
+* [Context](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#context)
+* [Installer](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#installer)
+* [Configurator](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#configurator)
+* [Injector](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#injector)
+* [Dispatcher](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#dispatcher)
+* [Adapter](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#adapter)
+* [Controller](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#controller)
+* [Command Map](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#command-map)
+* [Reflector](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#reflector)
+* [Mono](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#mono)
+* [Graphic](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#graphic)
 * [ResourceAsync](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#resourceasync)
-* [Patterns](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#patterns)
-* [Attributes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#attributes)
-* [Promises](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#promises)
-* [Errores Comunes](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#errores-comunes)
+* [Patterns](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#patterns)
+* [Attributes](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#attributes)
+* [Promises](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#promises)
+* [Errores Comunes](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#errores-comunes)
 
 ## Context
 ```csharp
@@ -185,7 +185,7 @@ IPromise<float> CrossFadeColor (CanvasRenderer canvasRenderer, Color targetColor
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-graphic)
 
-## ResouceAsync
+## ResourceAsync
 ```csharp
 static IPromise<Z> Execute(IContext context);
 ```
@@ -257,130 +257,6 @@ IPromise<T>:
 ```
 
 [Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-promises)
-
-## Errores Comunes
-
-#### Injector
-
-* Cuando tenemos injecciones circulares, bidireccionales o cíclicas. 
-Error de diseño.
-Debemos de tener claro que el injector actúa de forma recursiva. Si "A" contiene a "B", "B" no puede contener el Inject de "A" porque entraríamos en un loop.
-Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés en un método que no sea ni el Awake() - Start () o [PostConstruct].
-
-Podemos crear un metodo llamado "void Initialize()" y ser llamado desde fuera para recuperar esa dependencia.
-
-```csharp
-InjectorMissingMappingException: Injector is missing a mapping to handle injection into property 'XXXXXX' of object 'ZZZZZZ (ZZZZZZ)' with type 'ZZZZZZZ'. Target dependency: '[MappingId: type=XXXXXXX, key=]'
-swiftsuspenders.typedescriptions.PropertyInjectionPoint.ApplyInjection (System.Object target, System.Type targetType, swiftsuspenders.Injector injector) (at /Users/james/Documents/git/swiftsuspenders-sharp/src/swiftsuspenders/typedescriptions/PropertyInjectionPoint.cs:31)
-```
-
-* Si utilizamos un mapeo en el injector "ToType" en el fichero de configuración obtendremos un error
-
-```csharp
-injector.Map<Figure>().ToType<Cuadrado>();
-```
-y el valor de la clase a recuperar mediante el inject será nulo. Solo se puede usar en el scope local de una llamada a un método/lambda y a través de "inject.GetOrNewCreateInstance<T>()"
-
-```csharp
-[Inject]
-public Cuadrado cuadrado
-```
-
-#### Dispatcher
-
-* Si queremos lanzar un Action sin el ICommander debemos de ejecutar la llamada con la instancia de un evento de contexto, evento de injection, evento de tipo o evento de T.
-
-Añadimos
-```csharp
-dispatcher.Add (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, PuzzleControllerPostInitializeAction.Listener ());
-```
-
-Ejecutamos
-```csharp
-EventContext -> Obtiene el contexto 
-EventInject -> Obtiene el injector
-Event -> Obtine el Type
-Event<T> -> Obtiene T
-
-dispatcher.Execute (EventContext.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, context ));
-dispatcher.Execute (EventInject.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, injector ));
-dispatcher.Execute (Event.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION));
-dispatcher.Execute (Event<T>.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, T ));
-
-``` 
-
-Muy atento a los parametros de la lambda.
-Recuperamos un argumento de tipo Context.
-
-```csharp
-dispatcher.Execute (EventContext.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, context ));
-
-public class PuzzleControllerPostInitializeAction {
-	public static Action<IEventContext> Listener(){
-		return (IEventContext eventContext) => {
-			var _context = eventContext.context;
-			};				
-		};
-	}
-}
-```
-
-Recuperamos un argumento de tipo Inject.
-
-```csharp
-dispatcher.Execute (EventInject.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, injector ));
-
-public class PuzzleControllerPostInitializeAction {
-	public static Action<EventInject> Listener(){
-		return (EventInject eventInjector) => {
-			var _injector = eventInjector.injector;
-			};				
-		};
-	}
-}
-
-``` 
-
-Recuperamos un argumento de tipo Type.
-
-```csharp
-dispatcher.Execute (Event.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION ));
-
-public class PuzzleControllerPostInitializeAction {
-	public static Action<Event> Listener(){
-		return (Event event) => {
-			var _type = event.type;
-			};				
-		};
-	}
-}
-
-``` 
-
-Aquí es aconsejable pasarle un mapa siempre que se pueda.
-```csharp
-dispatcher.Execute (Event<T>.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, T ));
-
-public class PuzzleControllerPostInitializeAction {
-	public static Action<Event<T>> Listener(){
-		return (Event<T> event) => {
-			var _T = event.T;
-			};				
-		};
-	}
-}
-
-``` 
-
-
-* Si queremos lanzar un ICommand debemos de ejecutar la llamada a través de la instancia de la clase del Evento. Ésta se injectará en el comando automáticamente.
-
-```csharp
-eventCommandMap.Map(PuzzleGameConfigureEvent.Type.POST_INITIALIZE_EVENT).ToCommand<PuzzleGameConfigureCommand>();
-dispatcher.Add (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, TopRectangleScorePostInitializeAction.Listener ());
-		
-dispatcher.Execute(PuzzleGameConfigureEvent.Create());
-``` 
 
 # Ejemplos
 
@@ -1152,3 +1028,158 @@ public void DoneWithResolvedReject() {
 }
 
 ```
+
+
+# Errores Comunes
+
+#### Injector
+
+* Cuando tenemos injecciones circulares, bidireccionales o cíclicas. 
+Error de diseño.
+Debemos de tener claro que el injector actúa de forma recursiva. Si "A" contiene a "B", "B" no puede contener el Inject de "A" porque entraríamos en un loop.
+Lo solución es tener claro cual de las dos clases es la que tiene más fuerza. En este caso, si "A" contiene a "B", "B" puede recuperar a "A" mediante el injector. Éste está presente en todas las clases injectadas en la configuracion y accedemos a "A" a través de inject.GetInstance<A>() o al revés en un método que no sea ni el Awake() - Start () o [PostConstruct].
+
+Podemos crear un metodo llamado "void Initialize()" y ser llamado desde fuera para recuperar esa dependencia.
+
+```csharp
+InjectorMissingMappingException: Injector is missing a mapping to handle injection into property 'XXXXXX' of object 'ZZZZZZ (ZZZZZZ)' with type 'ZZZZZZZ'. Target dependency: '[MappingId: type=XXXXXXX, key=]'
+swiftsuspenders.typedescriptions.PropertyInjectionPoint.ApplyInjection (System.Object target, System.Type targetType, swiftsuspenders.Injector injector) (at /Users/james/Documents/git/swiftsuspenders-sharp/src/swiftsuspenders/typedescriptions/PropertyInjectionPoint.cs:31)
+```
+
+* Si utilizamos un mapeo en el injector "ToType" en el fichero de configuración obtendremos un error
+
+```csharp
+injector.Map<Figure>().ToType<Cuadrado>();
+```
+y el valor de la clase a recuperar mediante el inject será nulo. Solo se puede usar en el scope local de una llamada a un método/lambda y a través de "inject.GetOrNewCreateInstance<T>()"
+
+```csharp
+[Inject]
+public Cuadrado cuadrado
+```
+
+#### Dispatcher
+
+* Si queremos lanzar un Action sin el ICommander debemos de ejecutar la llamada con la instancia de un evento de contexto, evento de injection, evento de tipo o evento de T.
+
+Añadimos
+```csharp
+dispatcher.Add (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, PuzzleControllerPostInitializeAction.Listener ());
+```
+
+Ejecutamos
+```csharp
+EventContext -> Obtiene el contexto 
+EventInject -> Obtiene el injector
+Event -> Obtine el Type
+Event<T> -> Obtiene T
+
+dispatcher.Execute (EventContext.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, context ));
+dispatcher.Execute (EventInject.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, injector ));
+dispatcher.Execute (Event.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION));
+dispatcher.Execute (Event<T>.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, T ));
+
+``` 
+
+Muy atento a los parametros de la lambda.
+Recuperamos un argumento de tipo Context.
+
+```csharp
+dispatcher.Execute (EventContext.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, context ));
+
+public class PuzzleControllerPostInitializeAction {
+	public static Action<IEventContext> Listener(){
+		return (IEventContext eventContext) => {
+			var _context = eventContext.context;
+			};				
+		};
+	}
+}
+```
+
+Recuperamos un argumento de tipo Inject.
+
+```csharp
+dispatcher.Execute (EventInject.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, injector ));
+
+public class PuzzleControllerPostInitializeAction {
+	public static Action<EventInject> Listener(){
+		return (EventInject eventInjector) => {
+			var _injector = eventInjector.injector;
+			};				
+		};
+	}
+}
+
+``` 
+
+Recuperamos un argumento de tipo Type.
+
+```csharp
+dispatcher.Execute (Event.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION ));
+
+public class PuzzleControllerPostInitializeAction {
+	public static Action<Event> Listener(){
+		return (Event event) => {
+			var _type = event.type;
+			};				
+		};
+	}
+}
+
+``` 
+
+Aquí es aconsejable pasarle un mapa siempre que se pueda.
+```csharp
+dispatcher.Execute (Event<T>.Create (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, T ));
+
+public class PuzzleControllerPostInitializeAction {
+	public static Action<Event<T>> Listener(){
+		return (Event<T> event) => {
+			var _T = event.T;
+			};				
+		};
+	}
+}
+
+``` 
+
+
+* Si queremos lanzar un ICommand debemos de ejecutar la llamada a través de la instancia de la clase del Evento. Ésta se injectará en el comando automáticamente.
+
+```csharp
+eventCommandMap.Map(PuzzleGameConfigureEvent.Type.POST_INITIALIZE_EVENT).ToCommand<PuzzleGameConfigureCommand>();
+dispatcher.Add (PuzzleGameConfigureEvent.Type.POST_INITIALIZE_ACTION, TopRectangleScorePostInitializeAction.Listener ());
+		
+dispatcher.Execute(PuzzleGameConfigureEvent.Create());
+``` 
+
+* Si queremos lanzar un ICommandAsync debemos de ejecutar la llamada a través de la instancia de la clase del Evento. Ésta se injectará en el comando automáticamente.
+
+El método Execute de la clase comando debe de ser sustituido por ExecuteAsync y devolver una promise.
+La clase del comando debe de implementar ICommandAsync.
+El dispatcher debe de hacer uso del método ExecuteAsync.
+
+```csharp
+
+eventCommandMap.Map(PuzzleGameConfigureEvent.Type.POST_INITIALIZE_EVENT).ToCommandAsync<PuzzleGameConfigureCommandAsync>();
+
+public PuzzleGameConfigureCommandAsync : ICommandAsync {
+
+	public IPromise ExecuteAsync() {
+		var promise = new Promise();
+		
+		{ ..... }
+		
+		return promise;
+	}
+}
+
+dispatcher
+	.ExecuteAsync(PuzzleGameConfigureEvent.Create())
+	.Then(()=>{
+	Debug.Log("Victor Bolinches Marin");
+});;
+
+``` 
+
