@@ -190,7 +190,7 @@ IPromise<float> CrossFadeColor (CanvasRenderer canvasRenderer, Color targetColor
 static IPromise<Z> Execute(IContext context);
 ```
 
-[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#resourceasync)
+[Ejemplo](https://github.com/vicboma1/FrameworkUnity/blob/master//README.md#ejemplo-resourceasync)
 
 ## Reflector
 ```csharp
