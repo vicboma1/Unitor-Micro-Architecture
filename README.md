@@ -748,7 +748,8 @@ Promise<float>.All(
 ```
 
 
-## Ejemplo reflector
+## Ejemplo reflector (Open Source)
+
 Libreria que permite técnicas de reflexión para invocaciones dinámicas a los Patterns del Framework, creaciones de clases con injects, setteo de variables privates, mocks, stubs...
 
 https://github.com/vicboma1/Reflection
