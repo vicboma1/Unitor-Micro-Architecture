@@ -622,8 +622,8 @@ public class NodeController: MonoController
 	public NodeAnimationController animationController;
 
 	public Vector3 localPosition {
-		get { return transform.localPosition; }
-		set { transform.localPosition = value; }
+		get { return NodeAdapter.transform.localPosition; }
+		set { NodeAdapter.transform.localPosition = value; }
 	}
 		
 	protected override void Awake(){
@@ -848,7 +848,7 @@ public class MonoInject : MonoBehaviour {
 }
 ```
 
-## Ejemplo graphic
+## Ejemplo Graphic
 Sobreescribe la clase abstract de UnityEngine para otorgar una promesa en los métodos asíncronos de ITweener
 
 ```csharp
@@ -879,8 +879,6 @@ https://github.com/vicboma1/Reflection
 
 
 ## Ejemplo attributes
-
-
 
 ```csharp
 using UnityEngine;
@@ -943,7 +941,61 @@ public class Controller2 : MonoController {
 		
 }
 
+public interface ITopRectangleScoreAdapter {
+	 Text countDownText { get; }
+	 Slider countDownGage { get; }
+	 Button countDownTimeButton{ get;}
+}
+
+
+[ToResourceAsync()]
+[ToInterface(typeof(ITopRectangleScoreAdapter)]
+public class TopRectangleScoreAdapter : MonoAdapterView, ITopRectangleScoreAdapter {
+
+	[Inject]
+	public IInjector vinjector;
+
+	public Text _countDownText;
+	public Slider _countDownGage;
+	public Button _countDownTimeButton;
+
+	public Text countDownText { get; private set;}
+	public Slider countDownGage { get; private set;}
+	public Button countDownTimeButton{ get; private set;}
+
+	protected override void Awake(){
+		base.Awake ();
+	}
+
+	protected override void Start () {
+		base.Start ();
+	}
+	
+	[PostConstruct]
+	public void PostStart(){
+		countDownText = _countDownText;
+		countDownGage = _countDownGage;
+		countDownTimeLength = _countDownTimeLength;
+	}
+		
+	void Update () {
+	
+	}
+}
 ```
+
+## Ejemplo ResourceAsync
+
+```csharp
+
+[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+private static void OnAfterSceneLoadRuntimeMethod() {
+	Debug.Log ("After scene loaded - Called Awake and run Configure ");
+	ResourceAsync.Invoke (context);
+}
+	
+```
+
 
 ## Ejemplo promises
 ```csharp
