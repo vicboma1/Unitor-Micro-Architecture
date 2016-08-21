@@ -1,9 +1,4 @@
-# Unitor - MicroFramework based on:
-* Robotlegs (AS3)
-* Strange IOC
-* Dry-IO
-* Promises (JS)
-* Spring.io
+# Unitor - Micro Architecture based on the best agile frameworks :
 
 Api
 * [Context](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#context)
