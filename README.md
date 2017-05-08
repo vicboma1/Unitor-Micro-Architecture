@@ -18,6 +18,15 @@ Api
 * [Promises](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#promises)
 * [Errores Comunes](https://github.com/vicboma1/Unitor-Micro-Architecture/blob/master/README.md#errores-comunes)
 
+## Games
+
+* [T-Rex Game](https://github.com/vicboma1/T-Rex-Game)
+* [U-Match | Swap - Slide/Line Link - Tap]()
+	* [Cube Line Match - 3](https://github.com/vicboma1/Unity-game-line-3)
+	* [Cube Swap Match - 3]()
+	* [Cube Tap Match - 3]()
+* [Pirate Adventure Match ](https://play.google.com/store/apps/details?id=com.playgram.piratematch)
+
 ## Context
 ```csharp
 event EventHandler OnPostInitialize;
